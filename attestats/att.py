@@ -29,17 +29,23 @@ def search_parameters():
 def read_and_filter_excel(filename, t_task, task):
     try:
         df = pd.read_excel(filename)
-        # regex = re.compile(r'^г|^г\.|^г\. ')
         df_filtered = df.loc[df[t_task] == task]
         if df_filtered.size != 0:
             print(f'Searching data is in file {filename}')
-            df_filtered.to_excel(rf'.\output\{task}.xlsx')
+            df_filtered.to_excel(rf'{output_directory}\{task}.xlsx')
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)
 
+output_directory = r"D:\ProjectPython\PROJECTS\attestats\output"
 
-directory = r"D:\ProjectPython\BalakinMike\attestats"
+try:
+    os.makedirs(output_directory)
+    print(f"Successfully created the directory: {output_directory}")
+except FileExistsError:
+    print(f"The directory: {output_directory} already exists.")
+
+directory = r"D:\ProjectPython\PROJECTS\attestats\input"
 
 t_task, task = search_parameters()
 

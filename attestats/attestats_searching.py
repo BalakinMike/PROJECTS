@@ -37,7 +37,7 @@ def read_and_filter_excel(filename, t_task, task):
         print(f"Error processing file: {filename}")
         print(e)
 
-output_directory = r"D:\ProjectPython\BalakinMike\attestats\output"
+output_directory = r"D:\ProjectPython\PROJECTS\attestats\output"
 
 try:
     os.makedirs(output_directory)
@@ -45,7 +45,7 @@ try:
 except FileExistsError:
     print(f"The directory: {output_directory} already exists.")
 
-directory = r"D:\ProjectPython\BalakinMike\attestats"
+directory = r"D:\ProjectPython\PROJECTS\attestats\input"
 
 t_task, task = search_parameters()
 
