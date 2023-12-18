@@ -36,7 +36,9 @@ def read_and_filter_excel(filename, t_task, task):
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)
-def main():
+
+if __name__ == "__main__":
+
     output_directory = r"D:\ProjectPython\PROJECTS\attestats\output"
 
     try:
@@ -58,5 +60,5 @@ def main():
         else:
             print(f"Skipping non-xlsx file: {filename}")
 
-if __name__ == "__main__":
-    main()
+
+    
