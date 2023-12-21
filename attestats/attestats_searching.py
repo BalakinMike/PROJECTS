@@ -26,7 +26,8 @@ def search_parameters():
         print(t_task, task)
         return t_task, task
     
-def read_and_filter_excel(filename, t_task, task):
+def read_and_filter_excel(filename, t_task, task, output_directory):
+    print(filename, t_task, task)
     try:
         df = pd.read_excel(filename)
         df_filtered = df.loc[df[t_task] == task]
@@ -37,23 +38,25 @@ def read_and_filter_excel(filename, t_task, task):
         print(f"Error processing file: {filename}")
         print(e)
 
-output_directory = r"D:\ProjectPython\BalakinMike\attestats\output"
 
-try:
-    os.makedirs(output_directory)
-    print(f"Successfully created the directory: {output_directory}")
-except FileExistsError:
-    print(f"The directory: {output_directory} already exists.")
+if __name__ == "__main__":
+    # output_directory = r"D:\ProjectPython\BalakinMike\attestats\output"
 
-directory = r"D:\ProjectPython\BalakinMike\attestats"
+    try:
+        os.makedirs(output_directory)
+        print(f"Successfully created the directory: {output_directory}")
+    except FileExistsError:
+        print(f"The directory: {output_directory} already exists.")
 
-t_task, task = search_parameters()
+    directory = r"D:\ProjectPython\BalakinMike\attestats"
 
-if not os.path.exists(directory):
-    raise FileNotFoundError(f"Directory not found: {directory}")
+    t_task, task = search_parameters()
 
-for filename in os.listdir(directory):
-    if filename.endswith(".xlsx"):
-        read_and_filter_excel(os.path.join(directory, filename),t_task, task)
-    else:
-        print(f"Skipping non-xlsx file: {filename}")
+    if not os.path.exists(directory):
+        raise FileNotFoundError(f"Directory not found: {directory}")
+
+    for filename in os.listdir(directory):
+        if filename.endswith(".xlsx"):
+            read_and_filter_excel(os.path.join(directory, filename),t_task, task, output_directory)
+        else:
+            print(f"Skipping non-xlsx file: {filename}")
