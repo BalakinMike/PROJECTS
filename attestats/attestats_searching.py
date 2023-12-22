@@ -34,6 +34,7 @@ def read_and_filter_excel(filename, t_task, task, output_directory):
         if df_filtered.size != 0:
             print(f'Searching data is in file {filename}')
             df_filtered.to_excel(rf'{output_directory}\{task}.xlsx')
+            return f'{task}.xlsx'
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)

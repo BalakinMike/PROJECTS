@@ -99,19 +99,18 @@ while True:
     #     tasks = [t_task, task]
     t_task = 'Фамилия получателя'
     task = values["-DATA_LN-"]
-    tasks = [t_task, task]
+    flname = []
     
     if event == "-SEARCH-":
+        print(values["-DATA_N-"], values["-DATA_Ct-"] )
         
-        if values != []:
-            for filename in os.listdir(folder):
-                if filename.endswith(".xlsx"):
-                    ac.read_and_filter_excel(os.path.join(folder, filename),tasks[0], tasks[1], output_directory)
-                    
-                else:
-                    print(f"Skipping non-xlsx file: {filename}")
-       
-    window["-DATA_OUTPUT-"].update(tasks)
+        for filename in os.listdir(folder):
+            if filename.endswith(".xlsx"):
+                flname.append(ac.read_and_filter_excel(os.path.join(folder, filename),t_task, task, output_directory))
+                
+            else:
+                print(f"Skipping non-xlsx file: {filename}")
+        window["-DATA_OUTPUT-"].update(flname)
     
 # закрываем окно и освобождаем используемые ресурсы
 window.close()
