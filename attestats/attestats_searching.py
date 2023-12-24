@@ -38,10 +38,10 @@ def read_and_filter_excel(filename, t_task, task, output_directory):
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)
-
+        # return f'Error processing file: {filename}: {e}'
 
 if __name__ == "__main__":
-    # output_directory = r"D:\ProjectPython\BalakinMike\attestats\output"
+    output_directory = r"D:\ProjectPython\BalakinMike\attestats\output"
 
     try:
         os.makedirs(output_directory)
