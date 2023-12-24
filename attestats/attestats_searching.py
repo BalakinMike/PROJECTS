@@ -26,16 +26,19 @@ def search_parameters():
         print(t_task, task)
         return t_task, task
     
-def read_and_filter_excel(filename, t_task, task):
+def read_and_filter_excel(filename, t_task, task, output_directory):
+    print(filename, t_task, task)
     try:
         df = pd.read_excel(filename)
         df_filtered = df.loc[df[t_task] == task]
         if df_filtered.size != 0:
             print(f'Searching data is in file {filename}')
             df_filtered.to_excel(rf'{output_directory}\{task}.xlsx')
+            return f'{task}.xlsx'
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)
+        # return f'Error processing file: {filename}: {e}'
 
 if __name__ == "__main__":
 
@@ -46,11 +49,19 @@ if __name__ == "__main__":
         print(f"Successfully created the directory: {output_directory}")
     except FileExistsError:
         print(f"The directory: {output_directory} already exists.")
+    try:
+        os.makedirs(output_directory)
+        print(f"Successfully created the directory: {output_directory}")
+    except FileExistsError:
+        print(f"The directory: {output_directory} already exists.")
 
     directory = r"D:\ProjectPython\PROJECTS\attestats\input"
 
     t_task, task = search_parameters()
+    t_task, task = search_parameters()
 
+    if not os.path.exists(directory):
+        raise FileNotFoundError(f"Directory not found: {directory}")
     if not os.path.exists(directory):
         raise FileNotFoundError(f"Directory not found: {directory}")
 

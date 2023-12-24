@@ -1,7 +1,31 @@
 # подключаем библиотеки
 import PySimpleGUI as sg
 import os
-import attestats_searching as ac
+import pandas as pd
+import numpy as np
+
+
+def flick_through(folder, t_task, task, output_directory):
+    for filename in os.listdir(folder):
+            if filename.endswith(".xlsx"):
+                result_filename.append(read_and_filter_excel(os.path.join(folder, filename),t_task, task, output_directory))
+                
+            else:
+                print(f"Skipping non-xlsx file: {filename}")
+
+def read_and_filter_excel(filename, t_task, task, output_directory):
+    print(filename, t_task, task)
+    try:
+        df = pd.read_excel(filename)
+        df_filtered = df.loc[df[t_task] == task]
+        if df_filtered.size != 0:
+            print(f'Searching data is in file {filename}')
+            df_filtered.to_excel(rf'{output_directory}\{task}.xlsx')
+            return f'{task}.xlsx'
+    except Exception as e:
+        print(f"Error processing file: {filename}")
+        print(e)
+        # return f'Error processing file: {filename}: {e}'
 
 file_list_column = [
     [
@@ -11,9 +35,9 @@ file_list_column = [
         
     ],
     [sg.Text("Ввод поисковых параметров"),],
-    [sg.Text("Номер документа   "), sg.In(size=(25, 1), enable_events=True, key="-DATA_N-"),],
-    [sg.Text("Фамилия выпускника"), sg.In(size=(25, 1), enable_events=True, key="-DATA_LN-"),],
-    [sg.Text("Город рождения    "), sg.In(size=(25, 1), enable_events=True, key="-DATA_Ct-"),],
+    [sg.Text("Номер документа   "), sg.InputText(key="-DATA_N-")],
+    [sg.Text("Фамилия выпускника"), sg.InputText(key="-DATA_LN-")],
+    [sg.Text("Город рождения    "), sg.InputText(key="-DATA_Ct-")],
     [sg.Button('Поиск', enable_events=True, key="-SEARCH-")],
     [
         sg.Listbox(
@@ -82,33 +106,26 @@ while True:
 
         except:
             pass
-    tasks = []
-    if event == "-DATA_N-":
-        t_task = 'Номер документа'
-        task = values["-DATA_N-"]
-        tasks = [t_task, task]
-            
-    elif event == "-DATA_LN-":
-        t_task = 'Фамилия выпускника'
-        task = values["-DATA_LN-"]
-        tasks = [t_task, task]
-                
-    elif event == "-DATA_Ct-":
-        t_task = 'Город рождения'
-        task = values["-DATA_Ct-"]
-        tasks = [t_task, task]
-    print(tasks)
+    print(values["-DATA_N-"], values["-DATA_Ct-"] )
+    t_task = 'Фамилия получателя'
+    task = values["-DATA_LN-"]
+    result_filename = []
+    
     if event == "-SEARCH-":
-        print(tasks)
-        if tasks != []:
-            for filename in os.listdir(folder):
-                if filename.endswith(".xlsx"):
-                    ac.read_and_filter_excel(os.path.join(folder, filename),tasks[0], tasks[1])
-                    print(tasks[0], tasks[1])
-                else:
-                    print(f"Skipping non-xlsx file: {filename}")
-       
-    window["-DATA_OUTPUT-"].update(tasks)
+        if values["-DATA_LN-"] != '':
+            t_task = 'Фамилия получателя'
+            task = values["-DATA_LN-"]
+            flick_through(folder, t_task, task, output_directory)
+        elif values["-DATA_N-"] != '':
+            t_task = 'Номер документа'
+            task = int(values["-DATA_N-"])
+            flick_through(folder, t_task, task, output_directory)
+        elif values["-DATA_Ct-"] !='':
+            t_task = 'Место рождения'
+            task = 'г.' + values["-DATA_Ct-"].title()
+            flick_through(folder, t_task, task, output_directory)
+
+        window["-DATA_OUTPUT-"].update(result_filename)
     
 # закрываем окно и освобождаем используемые ресурсы
 window.close()
