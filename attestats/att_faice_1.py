@@ -6,25 +6,25 @@ import pandas as pd
 def flick_through(folder, t_task, task, output_directory):
     for filename in os.listdir(folder):
             if filename.endswith(".xlsx"):
-                result_filename.append(read_and_filter_excel(os.path.join(folder, filename),t_task, task, output_directory))
-                
+                result_filename.append(read_and_filter_excel(os.path.join(folder, filename),filename,t_task, task, output_directory))
             else:
                 print(f"Skipping non-xlsx file: {filename}")
 
-def read_and_filter_excel(filename, t_task, task, output_directory):
-    print(filename, t_task, task)
+def read_and_filter_excel(full_filename, filename, t_task, task, output_directory):
+    print(full_filename, t_task, task)
     try:
-        df = pd.read_excel(filename)
+        df = pd.read_excel(full_filename)
         df_filtered = df.loc[df[t_task] == task]
         if df_filtered.size != 0:
-            print(f'Searching data is in file {filename}')
-            df_filtered.to_excel(rf'{output_directory}\{task}.xlsx')
-            return f'{task}.xlsx'
+            print(f'Searching data is in file {full_filename}')
+            name = filename.split('.')[0]
+            df_filtered.to_excel(rf'{output_directory}\{name}_'+f'{task}.xlsx')
+
+            return f'{name}_'+f'{task}.xlsx'
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)
-        # return f'Error processing file: {filename}: {e}'
-
+        
 file_list_column = [
     [
         sg.Text("Папка с исходными файлами"),
