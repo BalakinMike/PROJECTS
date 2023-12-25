@@ -2,8 +2,6 @@
 import PySimpleGUI as sg
 import os
 import pandas as pd
-import numpy as np
-
 
 def flick_through(folder, t_task, task, output_directory):
     for filename in os.listdir(folder):
@@ -106,9 +104,7 @@ while True:
 
         except:
             pass
-    print(values["-DATA_N-"], values["-DATA_Ct-"] )
-    t_task = 'Фамилия получателя'
-    task = values["-DATA_LN-"]
+    
     result_filename = []
     
     if event == "-SEARCH-":
