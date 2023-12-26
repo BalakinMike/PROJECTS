@@ -4,14 +4,28 @@ import os
 import pandas as pd
 
 def flick_through(folder, t_task, task, output_directory):
+
+    '''In this procedure, files with a database of certificates are sorted.
+      Each file is then directed to a specific data retrieval procedure.'''
+    
     for filename in os.listdir(folder):
             if filename.endswith(".xlsx"):
-                result_filename.append(read_and_filter_excel(os.path.join(folder, filename),filename,t_task, task, output_directory))
+                request = (read_and_filter_excel(os.path.join(folder, filename),filename,t_task, task, output_directory))
+                if request !=None:
+                    result_filename.append(request[0])
             else:
                 print(f"Skipping non-xlsx file: {filename}")
 
 def read_and_filter_excel(full_filename, filename, t_task, task, output_directory):
-    print(full_filename, t_task, task)
+
+    '''Specific data retrieval procedure. 
+    In this procedure we are looking for concreate person from base.
+    Procedure gets: full_filename - full path to file, filename - short file name, 
+    t_task - name of column in data base, task - parameter in t_tasks column, output_directory.
+    Procedure response: Full path of result file and Short name of result file, without path'''
+
+    # print(full_filename, t_task, task)
+
     try:
         df = pd.read_excel(full_filename)
         df_filtered = df.loc[df[t_task] == task]
@@ -19,8 +33,9 @@ def read_and_filter_excel(full_filename, filename, t_task, task, output_director
             print(f'Searching data is in file {full_filename}')
             name = filename.split('.')[0]
             df_filtered.to_excel(rf'{output_directory}\{name}_'+f'{task}.xlsx')
-
-            return f'{name}_'+f'{task}.xlsx'
+            full_out_path = rf'{output_directory}\{name}_'+f'{task}.xlsx' # Full path of result file 
+            short_out_path = f'{name}_'+f'{task}.xlsx' # short name of result file, without path
+            return (short_out_path, full_out_path)
     except Exception as e:
         print(f"Error processing file: {filename}")
         print(e)
@@ -120,7 +135,7 @@ while True:
             t_task = 'Место рождения'
             task = 'г.' + values["-DATA_Ct-"].title()
             flick_through(folder, t_task, task, output_directory)
-
+        
         window["-DATA_OUTPUT-"].update(result_filename)
     
 # закрываем окно и освобождаем используемые ресурсы
