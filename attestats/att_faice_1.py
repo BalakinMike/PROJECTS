@@ -13,6 +13,7 @@ def flick_through(folder, t_task, task, output_directory):
                 request = (read_and_filter_excel(os.path.join(folder, filename),filename,t_task, task, output_directory))
                 if request !=None:
                     result_filename.append(request[0])
+                    return request
             else:
                 print(f"Skipping non-xlsx file: {filename}")
 
@@ -115,7 +116,7 @@ while True:
             filename = os.path.join(
                 values["-FOLDER-"], values["-FILE LIST-"][0]
             )
-            
+            print (values["-FILE LIST-"][0], 'HA!')
 
         except:
             pass
@@ -126,7 +127,7 @@ while True:
         if values["-DATA_LN-"] != '':
             t_task = 'Фамилия получателя'
             task = values["-DATA_LN-"]
-            flick_through(folder, t_task, task, output_directory)
+            request = flick_through(folder, t_task, task, output_directory)
         elif values["-DATA_N-"] != '':
             t_task = 'Номер документа'
             task = int(values["-DATA_N-"])
@@ -137,6 +138,15 @@ while True:
             flick_through(folder, t_task, task, output_directory)
         
         window["-DATA_OUTPUT-"].update(result_filename)
-    
+        
+        values["-DATA_OUTPUT-"] = request # Upgrade values in output key
+        # print (values["-DATA_OUTPUT-"][1])
+    if event == "-DATA_OUTPUT-":  # A file was chosen from the listbox
+        try:
+            filename = values["-DATA_OUTPUT-"][1] #os.path.join(values["-FOLDER-"], values["-FILE LIST-"][0])
+            print (filename)
+
+        except:
+            pass
 # закрываем окно и освобождаем используемые ресурсы
 window.close()
