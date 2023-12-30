@@ -1,0 +1,44 @@
+import PySimpleGUI as sg
+
+NAME_SIZE = 23
+
+def name(name):
+   
+    return sg.Text(name + ':', size=(NAME_SIZE,1), justification='l',pad=(0,0), font='Courier 20')
+
+rightclick=['&Edit', ['C&ut', '&Copy','&Paste', '&Undo']]
+menu_def = [['&File', ['&New', '&Open', '&Save', 'E&xit', ]], ['Edit', ['Cut', 'Copy', 'Paste', 'Undo'], ],  ['Help', 'About...'], ]
+
+# ----- Full layout -----
+layout = [[sg.Menu(menu_def)],
+          [sg.Text("Text, which going to translate in color code:")],
+          [sg.Multiline("", key='-IN-', expand_x=True, expand_y=True)],
+          [sg.Text("Color code, which represents text in left window:")],
+          [sg.Multiline("", key='-OUT-', expand_x=True, expand_y=True)],
+          [sg.Graph(canvas_size=(400,100),graph_bottom_left=(0,0), 
+                    graph_top_right=(400,100), background_color='light grey', 
+                    enable_events=True, key = 'graph')],
+          [sg.Button('Code', key='-TRANSFORM-')],
+]
+
+window = sg.Window("Color coder", layout, right_click_menu=rightclick, finalize=True)
+graph = window['graph']
+# rectangle = graph.draw_rectangle((0, 0), (100, 100), line_color='purple')
+
+while True:
+    event, values = window.read()
+    
+    if event == "Exit" or event == sg.WIN_CLOSED:
+        break
+    if event == '-TRANSFORM-':
+        txt = window['-IN-'].get()
+        window['-OUT-'].update(txt)
+        values['-OUT-'] = txt
+        for i in range(len(txt)):
+            # a = ord('2')
+            hex_code_sym = f'{hex(ord(txt[i]))[2:]:0>6}'
+            print(hex_code_sym)
+            rectangle = graph.draw_rectangle((i,100), (i+5,95), line_color=f'#{hex_code_sym}')
+            graph.TKCanvas.itemconfig(rectangle, fill=f'#{hex_code_sym}')
+        print(event, values)
+window.close()
