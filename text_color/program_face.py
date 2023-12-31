@@ -1,10 +1,15 @@
 import PySimpleGUI as sg
+import json
 
 NAME_SIZE = 23
 
 def name(name):
    
     return sg.Text(name + ':', size=(NAME_SIZE,1), justification='l', pad=(0,0), font='Courier 20')
+
+with open('color_code_dict.json') as f:
+    color_code_dict = json.load(f)
+
 
 rightclick=['&Edit', ['C&ut', '&Copy','&Paste', '&Undo']]
 menu_def = [['&File', ['&New', '&Open', '&Save', 'E&xit', ]], ['Edit', ['Cut', 'Copy', 'Paste', 'Undo'], ],  ['Help', 'About...'], ]
@@ -35,8 +40,9 @@ while True:
         window['-OUT-'].update(txt)
         values['-OUT-'] = txt
         for i in range(len(txt)):
-            hex_code_sym = f'{hex(ord(txt[i]))[2:]:0>6}'
-            rectangle = graph.draw_rectangle((i,100), (i+5,95), line_color=f'#{hex_code_sym}')
-            graph.TKCanvas.itemconfig(rectangle, fill= f'#{hex_code_sym}')
+            
+            hex_code_sym = f'{hex(ord(txt[i]))[2:]}'
+            rectangle = graph.draw_rectangle((10*i,100), (10*i+10,90), line_color=f'{color_code_dict[hex_code_sym]}')
+            graph.TKCanvas.itemconfig(rectangle, fill= f'{color_code_dict[hex_code_sym]}')
         print(event, values)
 window.close()
