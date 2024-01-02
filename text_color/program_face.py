@@ -40,7 +40,6 @@ while True:
         window['-OUT-'].update(txt)
         values['-OUT-'] = txt
         for i in range(len(txt)):
-            
             hex_code_sym = f'{hex(ord(txt[i]))[2:]}'
             rectangle = graph.draw_rectangle((10*i,100), (10*i+10,90), line_color=f'{color_code_dict[hex_code_sym]}')
             graph.TKCanvas.itemconfig(rectangle, fill= f'{color_code_dict[hex_code_sym]}')
