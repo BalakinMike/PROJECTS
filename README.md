@@ -1,7 +1,11 @@
 # PROJECTS
 <h2> It's repository, contain my real projects: </h2>
 <ol>
-  <li>Project "Attestat" contains app to search puples data in attestats database. Project "Attestat" contains app to search puples data in attestats database. Currently, we can use as filters <b>"Last name", "Number of attestat", "sity of born" </b>. We have create GUI for project.</li>
+  <li>Project "Attestat" contains app to search puples data in attestats database. 
+    <ol>
+      <li>Currently, we can use as filters "Last name", "Number of attestat", "sity of born".</li> 
+      <li>We have create GUI for project.</li>
+      </ol>
   <li>
     Project "Text_color" contains app to translate text into color code.
     <ol>
